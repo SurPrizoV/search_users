@@ -6,7 +6,6 @@ export const List = ({ responseData }) => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [activeId, setActiveId] = useState(null);
   const [userCounts, setUserCounts] = useState({});
-  const [sortBy, setSortBy] = useState("asc");
 
   const onActiveChange = (id) => {
     setActiveId(activeId === id ? null : id);
@@ -25,7 +24,6 @@ export const List = ({ responseData }) => {
           followers: user.followers,
         };
       });
-
       const counts = await Promise.all(countPromises);
       const countsObject = counts.reduce(
         (obj, { id, ...counts }) => ({ ...obj, [id]: counts }),
@@ -33,7 +31,6 @@ export const List = ({ responseData }) => {
       );
       setUserCounts(countsObject);
     };
-
     fetchCounts();
   }, [responseData]);
 
@@ -46,33 +43,17 @@ export const List = ({ responseData }) => {
     pageNumbers.push(i);
   }
 
-  const sortedItems = responseData?.items?.sort((a, b) => {
-    const aCount = userCounts[a.id]?.repos || 0;
-    const bCount = userCounts[b.id]?.repos || 0;
-    if (sortBy === "asc") return aCount - bCount;
-    else return bCount - aCount;
-  });
-
   return (
     <>
-      <button
-        className={s.button}
-        onClick={() => setSortBy(sortBy === "asc" ? "desc" : "asc")}
-      >
-        {sortBy === "asc"
-          ? "Сортировать по убыванию"
-          : "Сортировать по возрастанию"}
-      </button>
       <div className={s.list}>
-        {sortedItems
+        {responseData?.items
           ?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
           .map((item) => (
             <div
               className={s.user}
               id={item.id}
               key={item.id}
-              onClick={() => onActiveChange(item.id)}
-            >
+              onClick={() => onActiveChange(item.id)}>
               <img src={item.avatar_url} alt="avatar" className={s.avatar} />
               <p className={s.login}>{item.login}</p>
               {activeId === item.id ? (
@@ -89,8 +70,7 @@ export const List = ({ responseData }) => {
           <button
             className={s.pag_button}
             key={number}
-            onClick={() => setCurrentPage(number)}
-          >
+            onClick={() => setCurrentPage(number)}>
             {number}
           </button>
         ))}

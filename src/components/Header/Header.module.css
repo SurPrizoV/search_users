@@ -24,3 +24,21 @@
   cursor: pointer;
   background-color: transparent;
 }
+
+.button_filter {
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 24px #ebebeb;
+  margin: 16px;
+  padding: auto;
+  transition: all 0.3s;
+}
+
+.button_filter:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 24px #bbbbbb;
+}
+
+.hidden {
+  display: none;
+}
