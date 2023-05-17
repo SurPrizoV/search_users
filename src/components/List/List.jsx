@@ -70,6 +70,7 @@ export const List = ({ responseData }) => {
             <div
               className={s.user}
               id={item.id}
+              key={item.id}
               onClick={() => onActiveChange(item.id)}
             >
               <img src={item.avatar_url} alt="avatar" className={s.avatar} />

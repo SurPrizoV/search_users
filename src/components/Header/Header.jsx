@@ -8,8 +8,22 @@ export const Header = ({ setResponseData }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const myLink = `https://api.github.com/search/users?q=${value}`;
-    const response = await fetch(myLink);
-    setResponseData(await response.json());
+    try {
+      const response = await fetch(myLink);
+      if (response.ok) {
+        setResponseData(await response.json());
+      } else if (response.status === 422) {
+        console.log("Ошибка: проверка не удалась или точка была заспамлена");
+      } else if (response.status === 503) {
+        console.log("Ошибка: сервис недоступен");
+      } else if (response.status === 304) {
+        console.log("Ошибка: не изменено");
+      } else {
+        console.log("Неизвестная ошибка");
+      }
+    } catch (error) {
+      console.log("Ошибка:", error.message);
+    }
   };
 
   return (
