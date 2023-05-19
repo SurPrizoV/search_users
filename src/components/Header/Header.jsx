@@ -1,44 +1,58 @@
 import s from "./Header.module.css";
 import { useState } from "react";
 import { IoSearch } from "react-icons/io5";
+import { Pagination } from "../Pagination/Pagination";
 
 export const Header = ({ responseData, setResponseData }) => {
   const [value, setValue] = useState("");
   const [desc, setDesc] = useState("desc");
+  const [pageNumber, setPageNumber] = useState("1");
+
+  const fetchData = async (url) => {
+    try {
+      const response = await fetch(url);
+      if (response.ok) {
+        return await response.json();
+      } else if (response.status === 422) {
+        console.log("Ошибка: проверка не удалась или точка была заспамлена");
+        return {};
+      } else if (response.status === 503) {
+        console.log("Ошибка: сервис недоступен");
+        return {};
+      } else if (response.status === 304) {
+        console.log("Ошибка: не изменено");
+        return {};
+      } else {
+        console.log("Неизвестная ошибка");
+        return {};
+      }
+    } catch (error) {
+      console.log("Ошибка:", error.message);
+      return {};
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const myLink = `https://api.github.com/search/users?q=${value}`;
-    try {
-      const response = await fetch(myLink);
-      if (response.ok) {
-        setResponseData(await response.json());
-      } else if (response.status === 422) {
-        console.log("Ошибка: проверка не удалась или точка была заспамлена");
-      } else if (response.status === 503) {
-        console.log("Ошибка: сервис недоступен");
-      } else if (response.status === 304) {
-        console.log("Ошибка: не изменено");
-      } else {
-        console.log("Неизвестная ошибка");
-      }
-    } catch (error) {
-      console.log("Ошибка:", error.message);
-    }
+    const responseData = await fetchData(myLink);
+    setResponseData(responseData);
   };
 
   const handleFilter = async (event) => {
     event.preventDefault();
     desc === "desc" ? setDesc("asc") : setDesc("desc");
     const filterLink = `https://api.github.com/search/users?q=${value}&sort=repositories&order=${desc}`;
-    try {
-      const response = await fetch(filterLink);
-      if (response.ok) {
-        setResponseData(await response.json());
-      }
-    } catch (error) {
-      console.log("Ошибка:", error.message);
-    }
+    const responseData = await fetchData(filterLink);
+    setResponseData(responseData);
+  };
+
+  const handlePagination = async (event, page) => {
+    event.preventDefault();
+    setPageNumber(page);
+    const paginationLink = `https://api.github.com/search/users?q=${value}&per_page=48&page=${page}`;
+    const responseData = await fetchData(paginationLink);
+    setResponseData(responseData);
   };
 
   return (
@@ -62,6 +76,11 @@ export const Header = ({ responseData, setResponseData }) => {
           ? "Сортировать по возрастанию"
           : "Сортировать по убыванию"}
       </button>
+      <Pagination
+        responseData={responseData}
+        pageNumber={pageNumber}
+        handlePagination={handlePagination}
+      />
     </>
   );
 };
