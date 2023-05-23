@@ -31,26 +31,39 @@ export const Header = ({ responseData, setResponseData }) => {
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const myLink = `https://api.github.com/search/users?q=${value}&per_page=48&page=${page}`;
-    const responseData = await fetchData(myLink);
+  const handleLink = async () => {
+    const link = `https://api.github.com/search/users?q=${value}&per_page=48&page=${page}&sort=repositories&order=${desc}`;
+    const responseData = await fetchData(link);
     setResponseData(responseData);
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    handleLink();
   };
+
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+  //   const myLink = `https://api.github.com/search/users?q=${value}&per_page=48&page=${page}`;
+  //   const responseData = await fetchData(myLink);
+  //   setResponseData(responseData);
+  // };
 
   const handleFilter = async (event) => {
     event.preventDefault();
     desc === "desc" ? setDesc("asc") : setDesc("desc");
-    const filterLink = `https://api.github.com/search/users?q=${value}&per_page=48&page=${page}&sort=repositories&order=${desc}`;
-    const responseData = await fetchData(filterLink);
-    setResponseData(responseData);
+    handleLink();
+    // const filterLink = `https://api.github.com/search/users?q=${value}&per_page=48&page=${page}&sort=repositories&order=${desc}`;
+    // const responseData = await fetchData(filterLink);
+    // setResponseData(responseData);
   };
 
   const handlePageChange = async (newPage) => {
     setPage(newPage);
-    const myLink = `https://api.github.com/search/users?q=${value}&per_page=48&page=${newPage}`;
-    const responseData = await fetchData(myLink);
-    setResponseData(responseData);
+    handleLink();
+    // const myLink = `https://api.github.com/search/users?q=${value}&per_page=48&page=${newPage}`;
+    // const responseData = await fetchData(myLink);
+    // setResponseData(responseData);
   };
 
   return (
