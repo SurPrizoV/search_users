@@ -42,28 +42,15 @@ export const Header = ({ responseData, setResponseData }) => {
     handleLink();
   };
 
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-  //   const myLink = `https://api.github.com/search/users?q=${value}&per_page=48&page=${page}`;
-  //   const responseData = await fetchData(myLink);
-  //   setResponseData(responseData);
-  // };
-
   const handleFilter = async (event) => {
     event.preventDefault();
     desc === "desc" ? setDesc("asc") : setDesc("desc");
     handleLink();
-    // const filterLink = `https://api.github.com/search/users?q=${value}&per_page=48&page=${page}&sort=repositories&order=${desc}`;
-    // const responseData = await fetchData(filterLink);
-    // setResponseData(responseData);
   };
 
   const handlePageChange = async (newPage) => {
     setPage(newPage);
     handleLink();
-    // const myLink = `https://api.github.com/search/users?q=${value}&per_page=48&page=${newPage}`;
-    // const responseData = await fetchData(myLink);
-    // setResponseData(responseData);
   };
 
   return (
@@ -80,6 +67,11 @@ export const Header = ({ responseData, setResponseData }) => {
           <IoSearch />
         </button>
       </form>
+      <p>
+        {desc === "desc"
+          ? "Отсортированно по убыванию"
+          : "Отсортированно по  возрастанию"}
+      </p>
       <button
         className={responseData ? `${s.button_filter}` : `${s.hidden}`}
         onClick={handleFilter}>
@@ -93,6 +85,7 @@ export const Header = ({ responseData, setResponseData }) => {
           onClick={() => handlePageChange(page - 1)}>
           Предыдущая
         </button>
+        <p>{page}</p>
         <button
           className={s.button_filter}
           onClick={() => handlePageChange(page + 1)}>
