@@ -39,6 +39,12 @@
   box-shadow: 0 8px 24px #bbbbbb;
 }
 
+.pagination {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
 .hidden {
   display: none;
 }
