@@ -23,7 +23,7 @@
 
 
 
--git clone https://github.com/username/github-user-search.git
+-git clone https://github.com/SurPrizoV/search_users
 
 
 2)Установите все необходимые зависимости с помощью команды:
